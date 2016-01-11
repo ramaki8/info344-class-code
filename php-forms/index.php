@@ -8,7 +8,7 @@ $appId = '2de143494c0b295cca9337e1e96b00e0';
 //weather icon URLs
 // http://openweathermap.org/img/w/{iconName}.png
 
-$q = '';
+$q = $_GET['q'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
