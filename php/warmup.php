@@ -12,5 +12,6 @@
         array_push($months, $month);
     }
     foreach($months as $m) {
-        echo $m . ' ';
+        echo $m . ', ';
     }
+?>
