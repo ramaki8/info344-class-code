@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var morgan =  require('morgan');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
@@ -11,9 +11,9 @@ var GitHubStrategy = require('passport-github').Strategy;
 var ghConfig = require('./secret/oauth-github.json');
 ghConfig.callbackURL = 'http://localhost:8080/signin/github/callback';
 
-var ghStrategy = new GitHubStrategy(ghConfig,
+var ghStrategy = new GitHubStrategy(ghConfig, 
     function(accessToken, refreshToken, profile, done) {
-        console.log('authentication successful!');
+        console.log('Authentication Successful!');
         console.dir(profile);
         done(null, profile);
     });
@@ -21,7 +21,7 @@ var ghStrategy = new GitHubStrategy(ghConfig,
 var cookieSigSecret = process.env.COOKIE_SIG_SECRET;
 if (!cookieSigSecret) {
     console.error('Please set COOKIE_SIG_SECRET');
-    process.exit(1); //if not 0, means something went wrong
+    process.exit(1);
 }
 
 var app = express();
@@ -35,42 +35,45 @@ app.use(session({
 }));
 
 passport.use(ghStrategy);
-
-//normally will just want to use userID.
-//Then when deserializing, lookup userID 
-//in db and get that user to deserialize.
-
-//only called during every authentication
 passport.serializeUser(function(user, done) {
-    done(null, user);
+    done(null, user); 
 });
-//called at the start of every session
 passport.deserializeUser(function(user, done) {
-    done(null, user);
+    done(null, user); 
 });
 
-//adds basic auth support
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/signin/github', passport.authenticate('github'));
-app.get('/signin/github/callback', passport.authenticate('github'),
+app.get('/signin/github/callback', passport.authenticate('github'), 
     function(req, res) {
-        res.redirect('/secure.html');
-    }); 
+        res.redirect('/secure.html'); 
+    });    
 app.get('/signout', function(req, res) {
     req.logout();
-    res.redirect('/');
+    res.redirect('/'); 
 });
 
 app.use(express.static(__dirname + '/static/public'));
 
 app.use(function(req, res, next) {
     //req.isAuthenticated()
+    //if you are, call next
+    next();
+    //if not, redirect to homepage
 });
 
+//this wont get called if one above never calls next
 app.use(express.static(__dirname + '/static/secure'));
 
+//if not authenticated, can't go to this api
+app.get('/api/v1/users/me', function(req, res) {
+    //if they are auth, how do i get user info?
+    //req.user is the currently authenticated user
+    res.json(req.user);
+});
+
 app.listen(80, function() {
-    console.log('server is listening...')
+    console.log('server is listening...');
 });
