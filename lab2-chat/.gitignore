@@ -7,4 +7,17 @@ node_modules
 
 # except files ending in `.template` or `.md`
 !**/secret/*.template
+<<<<<<< HEAD:lab2-chat/.gitignore
 !**/secret/*.md
+=======
+!**/secret/*.md
+
+# ignore .vagrant directory
+.vagrant
+
+# and the VSCode typings directory
+typings
+
+# ignore .key files
+*.key
+>>>>>>> 2cf08cf17a3f5dd45e47699cc347b2ecbb7c7ea1:.gitignore

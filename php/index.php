@@ -16,4 +16,8 @@ if (strlen($name) == 0) {
     <h1>Hello <?= htmlentities($name) ?>!</h1>
     
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 2cf08cf17a3f5dd45e47699cc347b2ecbb7c7ea1
